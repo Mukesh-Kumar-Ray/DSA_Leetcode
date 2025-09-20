@@ -10,17 +10,17 @@ public:
             return;
         }
 
-        for (int j = i; j < candidates.size(); j++) {
-            // skip duplicates at the same recursion level
-            if (j > i && candidates[j] == candidates[j - 1]) continue;
 
-            // prune (since sorted, no need to continue further)
-            if (sum + candidates[j] > target) break;
-
-            v.push_back(candidates[j]);
-            solve(j + 1, sum + candidates[j], candidates, target, vec, v);
+            v.push_back(candidates[i]);
+            solve(i + 1, sum + candidates[i], candidates, target, vec, v);
             v.pop_back();
-        }
+
+            int index = i+1;
+         while( index < candidates.size() && candidates[index] == candidates[i]){
+                  index++;
+         }
+
+          solve(index, sum , candidates, target, vec, v);
 
        }
     vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
