@@ -7,11 +7,11 @@ void solve (int i ,vector<vector<int>> &vec ,vector<int> &v , vector<int>& nums)
     }
 
     //pick 
-    if(i < nums.size()){
+    
     v.push_back(nums[i]);
     solve(i+1,vec,v,nums);
     v.pop_back();
-    }
+    
 
     //not pick
     int index = i+1;
