@@ -22,7 +22,7 @@ public:
         return (first || second);
     }
 
-    bool memo(int i, int target, vector<int>& nums ,vector<vector<int >> &vec) {
+    bool memo(int i,int target, vector<int>& nums, vector<vector<int>>& vec) {
         if (target == 0) {
             return true;
         }
@@ -34,17 +34,39 @@ public:
         if (target < 0) {
             return false;
         }
-        if(vec[i][target] != -1){
-            return vec [i][target];
+        if (vec[i][target] != -1) {
+            return vec[i][target];
         }
 
         // pick
-        bool first = memo(i + 1, target - nums[i], nums ,vec);
+        bool first = memo(i + 1, target - nums[i], nums, vec);
 
         // not pick
-        bool second = memo(i + 1, target, nums,vec);
+        bool second = memo(i + 1, target, nums, vec);
 
-        return vec [i][target] = max (first, second);
+        return vec[i][target] = max(first, second);
+    }
+
+    bool tabulation(int i,int target, vector<int>& nums) {
+        int n = nums.size();
+        vector<vector<int>> dp(n + 1, vector<int>(target + 1, false));
+        for(int i=0 ;i<=n;i++){
+            dp[i][0]=true;
+        }
+       
+        for (int i = n-1; i>=0; i--) {
+            for (int j = 1; j <= target; j++) {
+                // pick
+                bool first = (j>=nums[i]) ?  dp[i + 1][j - nums[i]] : false ; // tabulation(i + 1, target - nums[i], nums, vec);
+
+                // not pick
+                bool second = (i<=nums.size()) ?  dp[i + 1][j] : false ; // tabulation(i + 1, target, nums, vec);
+
+                dp[i][j] = first || second;
+            }
+        }
+
+        return dp[0][target];
     }
 
     bool canPartition(vector<int>& nums) {
@@ -62,8 +84,11 @@ public:
 
         // return solution(0,target,nums);
 
-        vector<vector<int>> vec(n+1, vector<int>(target + 1, -1));
+        // vector<vector<int>> vec(n+1, vector<int>(target + 1, -1));
 
-        return memo(0, target, nums ,vec);
+        // return memo(0, target, nums ,vec);
+
+        
+        return tabulation(0,target, nums);
     }
 };
