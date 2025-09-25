@@ -50,12 +50,27 @@ public:
     bool tabulation(int i,int target, vector<int>& nums) {
         int n = nums.size();
         vector<vector<int>> dp(n + 1, vector<int>(target + 1, false));
-        for(int i=0 ;i<=n;i++){
-            dp[i][0]=true;
-        }
+        // for(int i=0 ;i<=n;i++){
+        //     dp[i][0]=true;
+        // }
        
-        for (int i = n-1; i>=0; i--) {
-            for (int j = 1; j <= target; j++) {
+        for (int i = n; i>=0; i--) {
+            for (int j = 0; j <= target; j++) {
+                 if (j == 0) {
+                    dp[i][j]=true;
+                       continue;
+                 }
+
+        if (i >= nums.size()) {
+             dp[i][j]=false;
+                       continue;
+        }
+
+        if (j < 0) {
+             dp[i][j]=false;
+                       continue;
+           
+        }
                 // pick
                 bool first = (j>=nums[i]) ?  dp[i + 1][j - nums[i]] : false ; // tabulation(i + 1, target - nums[i], nums, vec);
 
