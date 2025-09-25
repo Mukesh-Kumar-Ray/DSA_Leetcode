@@ -77,7 +77,7 @@ public:
                 // not pick
                 bool second = (i<=nums.size()) ?  dp[i + 1][j] : false ; // tabulation(i + 1, target, nums, vec);
 
-                dp[i][j] = first || second;
+                dp[i][j] = max(first , second);
             }
         }
 
