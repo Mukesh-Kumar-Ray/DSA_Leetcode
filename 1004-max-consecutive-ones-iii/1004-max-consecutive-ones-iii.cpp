@@ -11,6 +11,7 @@ public:
             }
 
             if (count_zero < k) {
+                mx = max(mx, j - i + 1);
                 j++;
             } else if (count_zero == k) {
                 mx = max(mx, j - i + 1);
