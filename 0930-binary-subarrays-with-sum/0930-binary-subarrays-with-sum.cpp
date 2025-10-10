@@ -1,34 +1,21 @@
 class Solution {
 public:
-    int numSubarraysWithSum(vector<int>& nums, int k) {
-        /*
-        int i=0;
-        int j=0;
-        int sum=0;
-        int ans=0;
-
-        while(j < nums.size()){
-            sum += nums[j];
-            if(sum < k){
-                j++;
+    int atMost(vector<int>& nums, int goal){
+        int head, tail = 0, sum = 0, result = 0;
+        for (head = 0; head < nums.size(); head++) {
+            sum += nums[head];
+            while (sum > goal && tail <= head) {
+                sum -= nums[tail];
+                tail++;
             }
-            else if(sum == k){
-                ans++;
-                j++;
-            }
-            else if(sum > k ){
-                while(sum > k && i <= j){ // this condition keep in mind (&& i <= j)
-                    sum-=nums[i];
-                    i++;
-                    if (sum == k) ans++; // count subarray after shrink
-                }
-                j++;
-            }
+            result += head - tail + 1;
         }
-        return ans;
-        */
+        return result;
+    }
+    int numSubarraysWithSum(vector<int>& nums, int k) {
 
         // bu using hash map ........................
+        /*
         unordered_map<int,int>ump;
         int sum =0;
         int cnt=0;
@@ -46,6 +33,11 @@ public:
             }
         }
         return cnt;
+
+        */
+
+        //modified sliding window....................
+        return atMost(nums, k) - atMost(nums, k-1);
         
     }
 };
