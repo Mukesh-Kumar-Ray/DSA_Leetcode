@@ -17,22 +17,53 @@
 -- from Employee  e) as dup
 -- where dup.order_num = 1
 
+-- SELECT employee_id, department_id
+-- FROM (
+--     SELECT
+--         dup.employee_id,
+--         dup.department_id,
+--         ROW_NUMBER() OVER (
+--             PARTITION BY dup.employee_id
+--             ORDER BY dup.pr_num DESC
+--         ) AS order_num
+--     FROM (
+--         SELECT *,
+--             CASE
+--                 WHEN primary_flag = 'Y' THEN 1
+--                 ELSE 0
+--             END AS pr_num
+--         FROM Employee
+--     ) AS dup
+-- ) AS result
+-- WHERE order_num = 1;
+
+
+-- SELECT employee_id, department_id
+-- FROM (
+--     SELECT
+--         employee_id,
+--         department_id,
+--         ROW_NUMBER() OVER (
+--             PARTITION BY employee_id
+--             ORDER BY primary_flag DESC
+--         ) AS order_num
+--     FROM Employee
+-- ) AS result
+-- WHERE order_num = 1;
+
 SELECT employee_id, department_id
 FROM (
     SELECT
-        dup.employee_id,
-        dup.department_id,
+        employee_id,
+        department_id,
         ROW_NUMBER() OVER (
-            PARTITION BY dup.employee_id
-            ORDER BY dup.pr_num DESC
-        ) AS order_num
-    FROM (
-        SELECT *,
-            CASE
-                WHEN primary_flag = 'Y' THEN 1
-                ELSE 0
-            END AS pr_num
-        FROM Employee
-    ) AS dup
-) AS result
-WHERE order_num = 1;
+            PARTITION BY employee_id
+            ORDER BY
+                CASE
+                    WHEN primary_flag = 'Y' THEN 1
+                    ELSE 0
+                END DESC
+        ) AS rn
+    FROM Employee
+) AS t
+WHERE rn = 1;
