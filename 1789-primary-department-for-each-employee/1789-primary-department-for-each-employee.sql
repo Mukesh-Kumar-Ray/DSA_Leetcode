@@ -17,25 +17,25 @@
 -- from Employee  e) as dup
 -- where dup.order_num = 1
 
-SELECT employee_id, department_id
-FROM (
-    SELECT
-        dup.employee_id,
-        dup.department_id,
-        ROW_NUMBER() OVER (
-            PARTITION BY dup.employee_id
-            ORDER BY dup.pr_num DESC
-        ) AS order_num
-    FROM (
-        SELECT *,
-            CASE
-                WHEN primary_flag = 'Y' THEN 1
-                ELSE 0
-            END AS pr_num
-        FROM Employee
-    ) AS dup
-) AS result
-WHERE order_num = 1;
+-- SELECT employee_id, department_id
+-- FROM (
+--     SELECT
+--         dup.employee_id,
+--         dup.department_id,
+--         ROW_NUMBER() OVER (
+--             PARTITION BY dup.employee_id
+--             ORDER BY dup.pr_num DESC
+--         ) AS order_num
+--     FROM (
+--         SELECT *,
+--             CASE
+--                 WHEN primary_flag = 'Y' THEN 1
+--                 ELSE 0
+--             END AS pr_num
+--         FROM Employee
+--     ) AS dup
+-- ) AS result
+-- WHERE order_num = 1;
 
 
 -- SELECT employee_id, department_id
@@ -67,3 +67,12 @@ WHERE order_num = 1;
 --     FROM Employee
 -- ) AS t
 -- WHERE rn = 1;
+
+SELECT employee_id, department_id
+FROM Employee
+WHERE primary_flag='Y' OR 
+    employee_id in
+    (SELECT employee_id
+    FROM Employee
+    Group by employee_id
+    having count(employee_id)=1)
